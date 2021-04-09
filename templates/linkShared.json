@@ -1,6 +1,6 @@
 {
   "notification": {
-    "title": "Link shared by {{sender}}",
+    "title": "Tap to continue it, {{sender}}",
     "body": "A {{what}} has been sent from {{origin}}"
   },
   "data": {

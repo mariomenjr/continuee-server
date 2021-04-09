@@ -1,10 +1,11 @@
 {
   "name": "continuee-server",
-  "version": "1.0.0",
+  "version": "1.0.1-alpha",
   "description": "",
   "main": "app.js",
   "scripts": {
-    "dev": "nodemon app.js"
+    "dev": "cross-env NODE_ENV=development nodemon app.js",
+    "start": "cross-env NODE_ENV=production node app.js"
   },
   "keywords": [],
   "author": "",
@@ -15,6 +16,7 @@
     "json-templater": "^1.2.0"
   },
   "devDependencies": {
+    "cross-env": "^7.0.3",
     "nodemon": "^2.0.7"
   }
 }

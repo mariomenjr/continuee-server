@@ -1,0 +1,21 @@
+version: "3.1"
+services:
+    continuee-server:
+        container_name: continuee-server
+        image: continuee-server:1.0.1-alpha
+        user: node
+        build:
+            context: ./../
+            args:
+                - UNAME=${ENV_USER}
+                - UID=${ENV_UID}
+                - GID=${ENV_GID}
+            dockerfile: docker/${DOCKERFILE}
+        environment:
+            - PORT=${PORT}
+        ports:
+            - ${PORT}:${PORT}
+        volumes:
+            - /home/node/app/node_modules
+            - /home/node/app/.next
+            - ./../:/home/node/app

@@ -1,6 +1,6 @@
 {
   "name": "continuee-server",
-  "version": "1.0.1-alpha",
+  "version": "1.0.2-alpha",
   "description": "",
   "main": "app.js",
   "scripts": {
@@ -11,9 +11,11 @@
   "author": "",
   "license": "MIT",
   "dependencies": {
+    "dotenv": "^8.2.0",
     "express": "^4.17.1",
     "firebase-admin": "^9.5.0",
-    "json-templater": "^1.2.0"
+    "json-templater": "^1.2.0",
+    "mongoose": "^5.12.3"
   },
   "devDependencies": {
     "cross-env": "^7.0.3",

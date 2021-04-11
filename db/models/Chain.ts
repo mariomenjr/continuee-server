@@ -33,8 +33,5 @@ interface ChainDocument extends Chain, Document {} // ChainBaseDocument
 
 export interface ChainModel extends Model<ChainDocument> {}
 
-const Chain =
-  mongoose.models.Chain ||
+export default mongoose.models.Chain ||
   mongoose.model<ChainDocument, ChainModel>(`Chain`, ChainSchema);
-
-export default Chain;

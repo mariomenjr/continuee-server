@@ -1,6 +1,7 @@
 import { connect as _connect } from "mongoose";
 
 import Chain from "./models/Chain";
+import Device from "./models/Device";
 
 const {
   MONGO_USER,
@@ -21,4 +22,4 @@ function connect() {
   );
 }
 
-export default { connect, models: { Chain } };
+export default { connect, models: { Chain, Device } };

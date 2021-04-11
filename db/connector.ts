@@ -1,6 +1,6 @@
-const mongoose = require("mongoose");
+import { connect as _connect } from "mongoose";
 
-const ChainModel = require("./models/Chain");
+import Chain from "./models/Chain";
 
 const {
   MONGO_USER,
@@ -11,7 +11,7 @@ const {
 } = process.env;
 
 function connect() {
-  return mongoose.connect(
+  return _connect(
     `mongodb+srv://${MONGO_USER}:${MONGO_PASS}@${MONGO_HOST}/${MONGO_DB}?retryWrites=true&w=majority`,
     {
       useNewUrlParser: true,
@@ -21,4 +21,4 @@ function connect() {
   );
 }
 
-module.exports = { connect, models: { ChainModel } };
+export default { connect, models: { Chain } };

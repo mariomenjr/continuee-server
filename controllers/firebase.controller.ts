@@ -1,26 +1,25 @@
+import { Request, Response } from "express";
+import firebase from "firebase-admin";
 
-const firebase = require("firebase-admin");
 const templater = require("json-templater/object");
 
-const linkSharedTemplate = require("../templates/linkShared.json");
+import linkSharedTemplate from "../templates/linkShared.json";
 
-async function share(req, res) {
+export async function share(req: Request, res: Response) {
   try {
-    const {
-      registrationToken,
-      sharedLink
-    } = req.query;
-
-    console.debug({ registrationToken, sharedLink });
+    const query: any = req.query;
 
     const payload = templater(linkSharedTemplate, {
       sender: `Mario`,
       origin: `OnePlus 8`,
       what: `YouTube video`,
-      link: sharedLink,
+      link: query.sharedLink,
     });
 
-    const resp = await firebase.messaging().sendToDevice(registrationToken, payload);
+    const resp = await firebase
+      .messaging()
+      .sendToDevice(query.registrationToken, payload);
+
     return res.send(resp);
   } catch (error) {
     console.error(`[error] ${error}`);
@@ -33,5 +32,3 @@ async function share(req, res) {
 
 // Virtual phone
 // eTpHtrUCSxO9JV1JHuJZka:APA91bHLICywKfi_gnKUc9AAR7h9r7vuCOShNBgGPzu8kSIWRhhYtYnQIVKb_HYrl1UgRpCziz36jUV-tEv94rDWUu0LphZDyy-ovtgkeXXu1Xxe9kQF_eBeMghZDje2RPemAiVfZxB5
-
-module.exports = { share };

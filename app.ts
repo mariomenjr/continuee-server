@@ -1,0 +1,25 @@
+require("dotenv").config();
+
+import express from "express";
+import db from "./db/connector";
+
+import routes from "./src/routes";
+import firebaseAdmin from "./src/firebase/firebaseAdmin";
+
+const app = express();
+const PORT = process.env.PORT || 3010;
+
+firebaseAdmin.initialize();
+
+app.use(`/`, routes);
+
+db.connect()
+  .then(async () =>
+    app.listen(PORT, () =>
+      console.info(`[server]: Server is running at http://localhost:${PORT}`)
+    )
+  )
+  .catch((e: Error) => {
+    console.error(e);
+    process.exit(1);
+  });

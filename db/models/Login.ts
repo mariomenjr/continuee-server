@@ -1,17 +1,9 @@
 import { Chain } from "./Chain";
 import mongoose, { Schema, Document, Model, Types } from "mongoose";
 
-const DeviceSchema = new Schema<DeviceDocument, DeviceModel>(
+const LoginSchema = new Schema<LoginDocument, LoginModel>(
   {
-    name: {
-      type: Schema.Types.String,
-      required: true,
-    },
-    ver: {
-      type: Schema.Types.String,
-      required: true,
-    },
-    uid: {
+    token: {
       type: Schema.Types.String,
       required: true,
     },
@@ -32,10 +24,8 @@ const DeviceSchema = new Schema<DeviceDocument, DeviceModel>(
   { timestamps: true }
 );
 
-export interface Device {
-  name: string;
-  ver: string;
-  uid: string;
+export interface Login {
+  token: string;
   platformName: string;
   platformVer: string;
   chain: Types.ObjectId | Chain;
@@ -49,11 +39,11 @@ export interface Device {
  * See: Types, references, virtuals and instance methods
  * https://medium.com/@agentwhs/complete-guide-for-typescript-for-mongoose-for-node-js-8cc0a7e470c1
  */
-interface DeviceDocument extends Device, Document {} // DeviceBaseDocument
+interface LoginDocument extends Login, Document {} // LoginBaseDocument
 
-// export interface DeviceDocument extends DeviceBaseDocument {}
+// export interface LoginDocument extends LoginBaseDocument {}
 
-export interface DeviceModel extends Model<DeviceDocument> {}
+export interface LoginModel extends Model<LoginDocument> {}
 
-export default mongoose.models.Device ||
-  mongoose.model<DeviceDocument, DeviceModel>(`Device`, DeviceSchema);
+export default mongoose.models.Login ||
+  mongoose.model<LoginDocument, LoginModel>(`Login`, LoginSchema);

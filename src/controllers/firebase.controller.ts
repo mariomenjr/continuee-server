@@ -3,7 +3,7 @@ import firebase from "firebase-admin";
 
 const templater = require("json-templater/object");
 
-import linkSharedTemplate from "../templates/linkShared.json";
+import linkSharedTemplate from "../../templates/linkShared.json";
 
 export async function share(req: Request, res: Response) {
   try {

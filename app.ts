@@ -1,7 +1,7 @@
 require("dotenv").config();
 
 import express from "express";
-import db from "./db/connector";
+import db from "./src/db/connector";
 
 import routes from "./src/routes";
 import firebaseAdmin from "./src/firebase/firebaseAdmin";

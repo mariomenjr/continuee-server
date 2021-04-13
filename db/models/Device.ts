@@ -1,6 +1,17 @@
 import { Chain } from "./Chain";
 import mongoose, { Schema, Document, Model, Types } from "mongoose";
 
+const DevicePlatformSchema = new Schema({
+  name: {
+    type: Schema.Types.String,
+    required: true,
+  },
+  ver: {
+    type: Schema.Types.String,
+    required: true,
+  },
+});
+
 const DeviceSchema = new Schema<DeviceDocument, DeviceModel>(
   {
     name: {
@@ -15,14 +26,7 @@ const DeviceSchema = new Schema<DeviceDocument, DeviceModel>(
       type: Schema.Types.String,
       required: true,
     },
-    platformName: {
-      type: Schema.Types.String,
-      required: true,
-    },
-    platformVer: {
-      type: Schema.Types.String,
-      required: true,
-    },
+    platform: DevicePlatformSchema,
     chain: {
       type: Schema.Types.ObjectId,
       ref: `Chain`,
@@ -32,12 +36,16 @@ const DeviceSchema = new Schema<DeviceDocument, DeviceModel>(
   { timestamps: true }
 );
 
+export interface DevicePlatform {
+  name: string;
+  ver: string;
+}
+
 export interface Device {
   name: string;
   ver: string;
   uid: string;
-  platformName: string;
-  platformVer: string;
+  platform: DevicePlatform;
   chain: Types.ObjectId | Chain;
 }
 

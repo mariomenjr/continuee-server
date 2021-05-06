@@ -1,5 +1,17 @@
-import { Chain } from "./Chain";
 import mongoose, { Schema, Document, Model, Types } from "mongoose";
+
+import { Chain } from "./Chain";
+
+const LoginPlatformSchema = new Schema({
+  name: {
+    type: Schema.Types.String,
+    required: true,
+  },
+  url: {
+    type: Schema.Types.String,
+    required: true,
+  },
+});
 
 const LoginSchema = new Schema<LoginDocument, LoginModel>(
   {
@@ -7,14 +19,7 @@ const LoginSchema = new Schema<LoginDocument, LoginModel>(
       type: Schema.Types.String,
       required: true,
     },
-    platformName: {
-      type: Schema.Types.String,
-      required: true,
-    },
-    platformVer: {
-      type: Schema.Types.String,
-      required: true,
-    },
+    platform: LoginPlatformSchema,
     chain: {
       type: Schema.Types.ObjectId,
       ref: `Chain`,
@@ -24,10 +29,14 @@ const LoginSchema = new Schema<LoginDocument, LoginModel>(
   { timestamps: true }
 );
 
+export interface LoginPlatform {
+  name: string;
+  url: string;
+}
+
 export interface Login {
   token: string;
-  platformName: string;
-  platformVer: string;
+  platform: LoginPlatform;
   chain: Types.ObjectId | Chain;
 }
 

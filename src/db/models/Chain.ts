@@ -2,10 +2,6 @@ import mongoose, { Schema, Document, Model } from "mongoose";
 
 const ChainSchema = new Schema<ChainDocument, ChainModel>(
   {
-    chainGuid: {
-      type: Schema.Types.String,
-      required: true,
-    },
     token: {
       type: Schema.Types.String,
       required: true,
@@ -15,7 +11,6 @@ const ChainSchema = new Schema<ChainDocument, ChainModel>(
 );
 
 export interface Chain {
-  chainGuid: string;
   token: string;
 }
 

@@ -1,5 +1,6 @@
-import { Chain } from "./Chain";
 import mongoose, { Schema, Document, Model, Types } from "mongoose";
+
+import { Chain } from "./Chain";
 
 const DevicePlatformSchema = new Schema({
   name: {
@@ -14,15 +15,19 @@ const DevicePlatformSchema = new Schema({
 
 const DeviceSchema = new Schema<DeviceDocument, DeviceModel>(
   {
-    name: {
-      type: Schema.Types.String,
-      required: true,
-    },
-    ver: {
-      type: Schema.Types.String,
-      required: true,
-    },
     uid: {
+      type: Schema.Types.String,
+      required: true,
+    },
+    manufacturer: {
+      type: Schema.Types.String,
+      required: true,
+    },
+    brand: {
+      type: Schema.Types.String,
+      required: true,
+    },
+    registrationToken: {
       type: Schema.Types.String,
       required: true,
     },
@@ -42,9 +47,10 @@ export interface DevicePlatform {
 }
 
 export interface Device {
-  name: string;
-  ver: string;
   uid: string;
+  manufacturer: string;
+  brand: string;
+  registrationToken: string;
   platform: DevicePlatform;
   chain: Types.ObjectId | Chain;
 }
@@ -61,7 +67,26 @@ interface DeviceDocument extends Device, Document {} // DeviceBaseDocument
 
 // export interface DeviceDocument extends DeviceBaseDocument {}
 
-export interface DeviceModel extends Model<DeviceDocument> {}
+export interface DeviceModel extends Model<DeviceDocument> {
+  findByUid(uid: string): Promise<DeviceDocument|null>
+  findByUidWithChain(uid: string): Promise<DeviceDocument|null>
+}
 
-export default mongoose.models.Device ||
-  mongoose.model<DeviceDocument, DeviceModel>(`Device`, DeviceSchema);
+// Statics
+
+DeviceSchema.statics.findByUid = async function(
+  this: Model<DeviceDocument>,
+  uid: string
+): Promise<DeviceDocument|null> {
+  return await this.findOne({ uid }).exec();
+};
+
+DeviceSchema.statics.findByUidWithChain = async function(
+  this: Model<DeviceDocument>,
+  uid: string
+): Promise<DeviceDocument|null> {
+  
+  return await this.findOne({ uid }).populate("chain");
+};
+
+export default mongoose.model<DeviceDocument, DeviceModel>(`Device`, DeviceSchema);

@@ -1,5 +1,5 @@
+import firebase, { messaging } from "firebase-admin";
 import { Request, Response } from "express";
-import firebase from "firebase-admin";
 
 const templater = require("json-templater/object");
 
@@ -16,9 +16,11 @@ export async function share(req: Request, res: Response) {
       link: query.sharedLink,
     });
 
-    const resp = await firebase
+    const resp: messaging.MessagingDevicesResponse = await firebase
       .messaging()
       .sendToDevice(query.registrationToken, payload);
+
+    console.debug({ resp });
 
     return res.send(resp);
   } catch (error) {

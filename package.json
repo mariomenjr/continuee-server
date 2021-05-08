@@ -1,10 +1,10 @@
 {
   "name": "continuee-server",
-  "version": "1.1.1-alpha",
+  "version": "0.0.1-alpha",
   "description": "Continuee is an application that allow you to share links between your registered devices leveraging Firebase platform.",
   "main": "app.js",
   "repository": {
-    "url": "git@github.com:mariomenjr/continuee-server.git"
+    "url": "https://github.com/mariomenjr/continuee-server"
   },
   "scripts": {
     "dev": "cross-env NODE_ENV=development nodemon app.ts",

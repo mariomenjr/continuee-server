@@ -6,6 +6,7 @@ import db from "./src/db/connector";
 
 import routes from "./src/routes";
 import firebaseAdmin from "./src/firebase/firebaseAdmin";
+import passport from "./src/middlewares/auth.middleware";
 
 const app = express();
 const PORT = process.env.PORT || 3010;
@@ -16,7 +17,7 @@ firebaseAdmin.initialize();
 app.use(express.json());
 
 // All routes
-app.use(`/`, routes);
+app.use(`/`, passport.authenticate(`jwt`, { session: false }), routes);
 
 // TODO: Handle errors globally
 

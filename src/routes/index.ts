@@ -12,7 +12,7 @@ router.use(`/device`, deviceRouter);
 router.use(`/chain`, chainRouter);
 
 router.use(`/`, (_: Request, res: Response) =>
-  res.send(`${packageJson.name}/${packageJson.version} @ ${new Date()}`)
+  res.send([`${packageJson.name}/${packageJson.version} @ ${new Date()}`, `Repo: <a href="${packageJson.repository.url}">${packageJson.repository.url}</a>`].join(`<br />`))
 );
 
 export default router;

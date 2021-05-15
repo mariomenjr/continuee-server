@@ -1,5 +1,5 @@
 import express, { Response, Request, Router } from "express";
-import passport from "../middlewares/auth.middleware";
+import authorize from "../middlewares/auth.middleware";
 
 const router = express.Router();
 const STRATEGY = process.env.IDENTITY_STRATEGY;
@@ -29,7 +29,7 @@ const protectedRoutes = [
 protectedRoutes.forEach(({ endpoint, endpointRouter }) =>
   router.use(
     endpoint,
-    passport.authenticate(STRATEGY ?? `jwt`, { session: false }),
+    authorize,
     endpointRouter
   )
 );

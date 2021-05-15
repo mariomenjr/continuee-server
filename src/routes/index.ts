@@ -1,18 +1,46 @@
-import express, { Response, Request } from "express";
+import express, { Response, Request, Router } from "express";
+import passport from "../middlewares/auth.middleware";
 
 const router = express.Router();
+const STRATEGY = process.env.IDENTITY_STRATEGY;
 
 import packageJson from "../../package.json";
+
 import firebaseRouter from "./firebase.routes";
 import deviceRouter from "./device.routes";
 import chainRouter from "./chain.routes";
 
-router.use(`/firebase`, firebaseRouter);
-router.use(`/device`, deviceRouter);
-router.use(`/chain`, chainRouter);
+// Protected routes
+const protectedRoutes = [
+  {
+    endpoint: `/firebase`,
+    endpointRouter: firebaseRouter,
+  },
+  {
+    endpoint: `/device`,
+    endpointRouter: deviceRouter,
+  },
+  {
+    endpoint: `/chain`,
+    endpointRouter: chainRouter,
+  },
+];
+
+protectedRoutes.forEach(({ endpoint, endpointRouter }) =>
+  router.use(
+    endpoint,
+    passport.authenticate(STRATEGY ?? `jwt`, { session: false }),
+    endpointRouter
+  )
+);
 
 router.use(`/`, (_: Request, res: Response) =>
-  res.send([`${packageJson.name}/${packageJson.version} @ ${new Date()}`, `Repo: <a href="${packageJson.repository.url}">${packageJson.repository.url}</a>`].join(`<br />`))
+  res.send(
+    [
+      `${packageJson.name}/${packageJson.version} @ ${new Date()}`,
+      `Repo: <a href="${packageJson.repository.url}">${packageJson.repository.url}</a>`,
+    ].join(`<br />`)
+  )
 );
 
 export default router;

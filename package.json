@@ -1,6 +1,6 @@
 {
   "name": "continuee-server",
-  "version": "0.0.1-alpha",
+  "version": "0.0.2-alpha",
   "description": "Continuee is an application that allow you to share links between your registered devices leveraging Firebase platform.",
   "main": "app.js",
   "repository": {
@@ -8,8 +8,8 @@
   },
   "scripts": {
     "dev": "cross-env NODE_ENV=development nodemon app.ts",
-    "build": "tsc --project ./",
-    "start": "cross-env NODE_ENV=production node app.ts"
+    "build": "tsc --project ./ --outDir ./dist/",
+    "start": "cross-env NODE_ENV=production npm run build && node dist/app.js"
   },
   "keywords": [],
   "author": "",

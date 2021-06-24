@@ -2,7 +2,7 @@ version: "3.1"
 services:
     continuee-server:
         container_name: continuee-server
-        image: continuee-server:1.0.1-alpha
+        image: continuee-server:0.0.3-alpha.1
         user: node
         build:
             context: ./../

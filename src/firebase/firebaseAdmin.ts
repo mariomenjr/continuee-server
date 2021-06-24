@@ -6,7 +6,7 @@ export function initialize() {
   initializeApp({
     credential: _credential.cert(<any>serviceAccount),
   });
-  console.info(`[firebase] Firebase App initialized`);
+  console.info(`[firebase]: Firebase App initialized`);
 }
 
 export default { initialize };

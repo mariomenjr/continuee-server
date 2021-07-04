@@ -15,14 +15,10 @@ import ChainMongo, { Chain } from "../db/models/Chain";
  * @returns Words and noise words
  */
 export async function createSync(req: Request, res: Response) {
-  try {
-    const words = rword.generate(5);
-    const noise = rword.generate(5);
+  const words = rword.generate(5);
+  const noise = rword.generate(5);
 
-    return res.json({ noise: [...words, ...noise].shuffle(), words });
-  } catch (error) {
-    return res.status(500).send(error);
-  }
+  return res.json({ noise: [...words, ...noise].shuffle(), words });
 }
 
 /**
@@ -33,28 +29,19 @@ export async function createSync(req: Request, res: Response) {
  * @returns Newly created chain
  */
 export async function createChain(req: Request, res: Response) {
-  try {
-    const token = crypto
-      .createHash(`sha256`)
-      .update(JSON.stringify(req.body.words))
-      .digest(`hex`);
+  const token = crypto
+    .createHash(`sha256`)
+    .update(JSON.stringify(req.body.words))
+    .digest(`hex`);
 
-    const chain = await ChainMongo.create({ token });
-    const _ = await DeviceMongo.create({ ...req.body.device, chain });
+  const chain = await ChainMongo.create({ token });
+  const _ = await DeviceMongo.create({ ...req.body.device, chain });
 
-    return res.json(chain);
-  } catch (error) {
-    return res.status(500).send(error);
-  }
+  return res.json(chain);
 }
 
 export function join(req: Request, res: Response) {
-  try {
-    const body: Device = req.body;
-    console.log({ body });
-    return res.json(req.body);
-  } catch (error) {
-    console.error(`[error] ${error}`);
-    return res.status(500).send(error);
-  }
+  const body: Device = req.body;
+  console.log({ body });
+  return res.json(req.body);
 }

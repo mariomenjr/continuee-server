@@ -7,17 +7,19 @@ import { rword } from "rword";
 import DeviceMongo, { Device } from "../db/models/Device";
 import ChainMongo, { Chain } from "../db/models/Chain";
 
+/**
+ * Creates the Sync information for the user to confirm
+ * 
+ * @param req.body
+ * @param res 
+ * @returns Words and noise words
+ */
 export async function createSync(req: Request, res: Response) {
   try {
     const words = rword.generate(5);
     const noise = rword.generate(5);
 
-    const hash = crypto
-      .createHmac(`sha256`, `${req.body.deviceUid}`)
-      .update(JSON.stringify(words))
-      .digest(`hex`);
-
-    return res.json({ /*hash,*/ noised: [...words, ...noise].shuffle(), words });
+    return res.json({ noise: [...words, ...noise].shuffle(), words });
   } catch (error) {
     return res.status(500).send(error);
   }
@@ -32,8 +34,13 @@ export async function createSync(req: Request, res: Response) {
  */
 export async function createChain(req: Request, res: Response) {
   try {
-    const chain = await ChainMongo.create({ token: uuidv4() });
-    const device = await DeviceMongo.create({ ...req.body, chain });
+    const token = crypto
+      .createHash(`sha256`)
+      .update(JSON.stringify(req.body.words))
+      .digest(`hex`);
+
+    const chain = await ChainMongo.create({ token });
+    const _ = await DeviceMongo.create({ ...req.body.device, chain });
 
     return res.json(chain);
   } catch (error) {

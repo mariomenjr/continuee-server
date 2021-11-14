@@ -1,9 +1,9 @@
 import { Router } from "express";
 const router = Router();
 
-import { createSync, createChain, join } from "../controllers/chain.controller";
+import { generateSync, createChain, join } from "../controllers/chain.controller";
 
-router.route("/createSync").post(createSync);
+router.route("/generateSync").get(generateSync);
 router.route("/createChain").post(createChain);
 router.route("/join").put(join);
 

@@ -14,11 +14,11 @@ import ChainMongo, { Chain } from "../db/models/Chain";
  * @param res 
  * @returns Words and noise words
  */
-export async function createSync(req: Request, res: Response) {
-  const words = rword.generate(5);
-  const noise = rword.generate(5);
+export async function generateSync(req: Request, res: Response) {
+  const sync = (rword.generate(5) as string[]).join(` `);
+  const name = `My Sync Chain`;
 
-  return res.json({ noise: [...words, ...noise].shuffle(), words });
+  return res.json({ sync, name });
 }
 
 /**
@@ -31,7 +31,7 @@ export async function createSync(req: Request, res: Response) {
 export async function createChain(req: Request, res: Response) {
   const token = crypto
     .createHash(`sha256`)
-    .update(JSON.stringify(req.body.words))
+    .update(JSON.stringify(req.body.sync))
     .digest(`hex`);
 
   const chain = await ChainMongo.create({ token });
@@ -42,6 +42,6 @@ export async function createChain(req: Request, res: Response) {
 
 export function join(req: Request, res: Response) {
   const body: Device = req.body;
-  console.log({ body });
+  
   return res.json(req.body);
 }

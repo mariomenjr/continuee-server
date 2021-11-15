@@ -26,7 +26,15 @@ interface ChainDocument extends Chain, Document {} // ChainBaseDocument
 
 // export interface ChainDocument extends ChainBaseDocument {}
 
-export interface ChainModel extends Model<ChainDocument> {}
+export interface ChainModel extends Model<ChainDocument> {
+  findByToken(token: string): Promise<ChainDocument | null>;
+}
 
-export default mongoose.models.Chain ||
-  mongoose.model<ChainDocument, ChainModel>(`Chain`, ChainSchema);
+ChainSchema.statics.findByToken = async function (
+  this: Model<ChainDocument>,
+  token: string
+): Promise<ChainDocument | null> {
+  return await this.findOne({ token }).exec();
+};
+
+export default mongoose.model<ChainDocument, ChainModel>(`Chain`, ChainSchema);

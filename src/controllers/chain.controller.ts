@@ -1,22 +1,20 @@
-import crypto from "crypto";
-
 import { Request, Response } from "express";
-import { v4 as uuidv4 } from "uuid";
 import { rword } from "rword";
 
 import DeviceMongo, { Device } from "../db/models/Device";
-import ChainMongo, { Chain } from "../db/models/Chain";
+import ChainMongo from "../db/models/Chain";
+import { createHash } from "../utils/crypto.utils";
 
 /**
  * Creates the Sync information for the user to confirm
  * 
  * @param req.body
  * @param res 
- * @returns Words and noise words
+ * @returns Sync code and default chain name
  */
 export async function generateSync(req: Request, res: Response) {
   const sync = (rword.generate(5) as string[]).join(` `);
-  const name = `My Sync Chain`;
+  const name = `My Sync Chain`; // TODO: Take it to a confg file
 
   return res.json({ sync, name });
 }
@@ -29,19 +27,22 @@ export async function generateSync(req: Request, res: Response) {
  * @returns Newly created chain
  */
 export async function createChain(req: Request, res: Response) {
-  const token = crypto
-    .createHash(`sha256`)
-    .update(JSON.stringify(req.body.sync))
-    .digest(`hex`);
+  const token = createHash(req.body.sync);
 
   const chain = await ChainMongo.create({ token });
-  const _ = await DeviceMongo.create({ ...req.body.device, chain });
+  await DeviceMongo.create({ ...req.body.device, chain });
 
-  return res.json(chain);
+  return res.json({ chainId: chain.id }); // TODO: Don't send Chain (it has the token)
 }
 
-export function join(req: Request, res: Response) {
-  const body: Device = req.body;
-  
-  return res.json(req.body);
+export async function joinChain(req: Request, res: Response) {
+  const { device, token }: { device: Device, token: string } = req.body;
+
+  const foundChain = await ChainMongo.findByToken(createHash(token));
+  if (!foundChain) return res.status(404).send(`Invalid sync code. Chain not found.`);
+
+  const foundDevice = await DeviceMongo.findByUid(device.uid);
+  if (!foundDevice) await DeviceMongo.create({ ...req.body.device, chain: foundChain });
+
+  return res.json({ chainName: ``, isNewDevice: !foundDevice });
 }

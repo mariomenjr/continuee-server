@@ -44,5 +44,5 @@ export async function joinChain(req: Request, res: Response) {
   const foundDevice = await DeviceMongo.findByUid(device.uid);
   if (!foundDevice) await DeviceMongo.create({ ...req.body.device, chain: foundChain });
 
-  return res.json({ chainName: foundChain.name, isNewDevice: !foundDevice });
+  return res.json({ chainId: foundChain.id, chainName: foundChain.name, isNewDevice: !foundDevice });
 }

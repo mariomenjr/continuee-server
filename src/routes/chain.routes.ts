@@ -1,9 +1,10 @@
 import { Router } from "express";
 const router = Router();
 
-import { create, join } from "../controllers/chain.controller";
+import { generateSync, createChain, joinChain } from "../controllers/chain.controller";
 
-router.route("/create").post(create);
-router.route("/join").put(join);
+router.route("/generateSync").get(generateSync);
+router.route("/createChain").post(createChain);
+router.route("/joinChain").put(joinChain);
 
 export default router;

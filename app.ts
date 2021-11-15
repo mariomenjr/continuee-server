@@ -7,6 +7,8 @@ import db from "./src/db/connector";
 import routes from "./src/routes";
 import firebaseAdmin from "./src/firebase/firebaseAdmin";
 
+import "./src/extensions/Array.extension";
+
 const app = express();
 const PORT = process.env.PORT || 3010;
 

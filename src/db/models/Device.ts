@@ -57,8 +57,7 @@ export interface Device {
 
 /**
  * Not directly exported because it is not recommanded to
- * use this interface direct unless necessary since the related
- * entities' fields are not deterministic
+ * use this interface since the related entities' fields are not deterministic.
  *
  * See: Types, references, virtuals and instance methods
  * https://medium.com/@agentwhs/complete-guide-for-typescript-for-mongoose-for-node-js-8cc0a7e470c1

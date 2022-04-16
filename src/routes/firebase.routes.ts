@@ -3,6 +3,6 @@ const router = Router();
 
 import { share } from "../controllers/firebase.controller";
 
-router.route("/share").get(share);
+router.route("/share").post(share);
 
 export default router;

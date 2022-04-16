@@ -5,22 +5,25 @@ const templater = require("json-templater/object");
 
 import linkSharedTemplate from "../../templates/linkShared.json";
 
+import DeviceMongo from "../db/models/Device";
+
 export async function share(req: Request, res: Response) {
   try {
-    const query: any = req.query;
+    const body: any = req.body;
+
+    const fromDevice = await DeviceMongo.findByUid(body.devices.fromUid);
+    const toDevice = await DeviceMongo.findByUid(body.devices.toUid);
 
     const payload = templater(linkSharedTemplate, {
-      sender: `Mario`,
-      origin: `OnePlus 8`,
-      what: `YouTube video`,
-      link: query.sharedLink,
+      sender: fromDevice?.platform?.name ?? ``,
+      origin: toDevice?.platform?.name ?? ``,
+      what: `YouTube video`, // Find out given the URL
+      link: body.shareLink,
     });
 
     const resp: messaging.MessagingDevicesResponse = await firebase
       .messaging()
-      .sendToDevice(query.registrationToken, payload);
-
-    console.debug({ resp });
+      .sendToDevice(body.registrationToken, payload);
 
     return res.send(resp);
   } catch (error) {
@@ -28,9 +31,3 @@ export async function share(req: Request, res: Response) {
     return res.status(500).send(error);
   }
 }
-
-// OnePlus 8
-// cI8zqkYeRMaUTDmVC93Dlk:APA91bFoUYDptKR7tqG9mXDRx514-6eovvTgUKL6L8F26ISsBiKH6lQc4RlKSWoKEUIOQSAsf1_LWES4hw3u-bvPFdoDOWX_HJXYbNsPW2P4jJfxvpxvkD8dhh6ZqqTEiVvMLAalTTZK
-
-// Virtual phone
-// eTpHtrUCSxO9JV1JHuJZka:APA91bHLICywKfi_gnKUc9AAR7h9r7vuCOShNBgGPzu8kSIWRhhYtYnQIVKb_HYrl1UgRpCziz36jUV-tEv94rDWUu0LphZDyy-ovtgkeXXu1Xxe9kQF_eBeMghZDje2RPemAiVfZxB5
